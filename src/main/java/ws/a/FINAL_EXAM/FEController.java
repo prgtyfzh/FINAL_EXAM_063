@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
+
 public class FEController {
     Surat data = new Surat();
     SuratJpaController ctrl = new SuratJpaController();

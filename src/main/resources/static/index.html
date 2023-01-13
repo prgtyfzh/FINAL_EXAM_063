@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>FINAL EXAM</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <style>
+        fieldset {
+            width: 450px;
+            background-color: blanchedalmond;
+        }
+    </style>
+
+    <h1>SURAT</h1>
+
+    <script>
+        const url = "http://localhost:8080/data";
+
+        //get data from server
+        function get() {
+            $.ajax({
+                url: "http://localhost:8080/GET",
+                method: "GET",
+                dataType: "json",
+                success: function (data) {
+                    //start function
+                    $("#mytable").find("tbody").empty(); //for empty table if data exists
+                    $.each(data, function (key, value) {
+                        //fill data to table
+                        var td =
+                            "<tr><td>" +
+                            value.id +
+                            "</td> <td>" +
+                            value.noSurat +
+                            "</td> <td>" +
+                            value.judul +
+                            "</td> <td>" +
+                            value.tembusan +
+                            "</td> <td>" +
+                            value.file +
+                            "</td> <td>" +
+                            value.ts +
+                            "</td></tr>";
+                        $("#mytable").find("tbody").append(td);
+                    });
+                }, //end function
+            });
+        }
+
+        //create new data
+        function post() {
+            let id = document.getElementById("id").value;
+            let noSurat = document.getElementById("noSurat").value;
+            let judul = document.getElementById("judul").value;
+            let tembusan = document.getElementById("tembusan").value;
+            let dataText = { id: id, noSurat: noSurat, judul: judul, tembusan: tembusan };
+            let dataJson = JSON.stringify(dataText);
+            $.ajax({
+                url: 'http://localhost:8080/POST',
+                method: "POST",
+                data: dataJson,
+                contentType: "application/json",
+                dataType: "text",
+                success: function (result) {
+                    get();
+                },
+            });
+        }
+
+        function put() {
+            let id = document.getElementById("id").value;
+            let noSurat = document.getElementById("noSurat").value;
+            let judul = document.getElementById("judul").value;
+            let tembusan = document.getElementById("tembusan").value;
+            let dataText = { id: id, noSurat: noSurat, judul: judul, tembusan: tembusan };
+            let dataJson = JSON.stringify(dataText);
+            $.ajax({
+                url: "http://localhost:8080/PUT",
+                method: "PUT",
+                data: dataJson,
+                contentType: "application/json",
+                dataType: "text",
+                success: function (result) {
+                    get();
+                },
+            });
+        }
+
+        function delID() {
+            let id = document.getElementById("id").value;
+            let dataText = { id: id };
+            let dataJson = JSON.stringify(dataText);
+            $.ajax({
+                url: 'http://localhost:8080/DELETE',
+                method: "DELETE",
+                data: dataJson,
+                contentType: "application/json",
+                dataType: "text",
+                success: function (result) {
+                    get();
+                },
+            });
+        }
+    </script>
+
+    <fieldset>
+        <table>
+            <tr>
+                <td>ID</td>
+                <td>:</td>
+                <td><input type="text" id="id" name="id" /></td>
+            </tr>
+            <tr>
+                <td>NO SURAT</td>
+                <td>:</td>
+                <td><input type="text" id="noSurat" name="noSurat" /></td>
+            </tr>
+            <tr>
+                <td>JUDUL</td>
+                <td>:</td>
+                <td><input type="text" id="judul" name="judul" /></td>
+            </tr>
+            <tr>
+                <td>TEMBUSAN</td>
+                <td>:</td>
+                <td><input type="text" id="tembusan" name="tembusan" /></td>
+            </tr>
+            <tr>
+                <td>FILE</td>
+                <td>:</td>
+                <td><input type="file" id="file" name="file" /></td>
+            </tr>
+        </table>
+
+        <br />
+        <button onclick="get()">LIHAT DATA</button>
+        <button onclick="post()">TAMBAH DATA</button>
+        <button onclick="put()">EDIT DATA</button>
+        <button onclick="delID()">HAPUS DATA</button>
+    </fieldset>
+
+    <br />
+    <br />
+
+    <table id="mytable" border="1" style="background-color: blanchedalmond">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>NO_SURAT</th>
+                <th>JUDUL</th>
+                <th>TEMBUSAN</th>
+                <th>FILE</th>
+                <th>TIMESTAMPS</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</body>
+
+</html>
